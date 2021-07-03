@@ -185,7 +185,11 @@ namespace AddressBookDatabase
             return false;
         }
 
-
+        /// <summary>
+        /// Retrieve Contact by city
+        /// </summary>
+        /// <param name="city"></param>
+        /// <returns></returns>
         public bool RetrieveContact(string city)
         {
             SqlConnection connection = new SqlConnection(connectionString);
@@ -216,6 +220,39 @@ namespace AddressBookDatabase
                     outputMessage = flag >= 1 ? $"{flag} Contact(s) found" : "Contact not found";
                     Console.WriteLine(outputMessage);
                     return flag >= 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
+        /// <summary>
+        /// get size of database by city and state
+        /// </summary>
+        /// <returns> true or false</returns>
+        public bool GetSize()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "dbo.SpGetSize";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Console.WriteLine($"Number of cities: {dr.GetInt32(0)} \n Number of states: {dr.GetInt32(1)}");
+                    }
+                    return dr != null ? true : false; 
                 }
             }
             catch (Exception ex)

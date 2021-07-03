@@ -29,6 +29,8 @@ namespace AddressBookDatabase
             contact.DeleteContact("john");
             //retrieve contact with city
             contact.RetrieveContact("bangalore");
+            //get size by city and state
+            contact.GetSize();
         }
     }
 }
