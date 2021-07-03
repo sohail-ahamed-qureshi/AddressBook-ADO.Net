@@ -23,11 +23,12 @@ namespace AddressBookDatabase
             contact.AddContact(contact);
             //edit contact of terisa
             contact.EditContact("terisa", contact);
-            ////get Contact of terisa
+            //get Contact of terisa
             contact.GetContact("terisa");
             //delete Contact of john
             contact.DeleteContact("john");
-
+            //retrieve contact with city
+            contact.RetrieveContact("bangalore");
         }
     }
 }
