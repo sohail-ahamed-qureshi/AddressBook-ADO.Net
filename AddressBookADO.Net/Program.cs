@@ -33,6 +33,8 @@ namespace AddressBookDatabase
             contact.GetSize();
             //sort table alphabetically by person's name for given city
             contact.SortTable("Mysore");
+            //Get number of contacts by count by type
+            contact.GetSizeByType();
 
         }
     }

@@ -15,6 +15,8 @@ namespace AddressBookDatabase
         public int zipcode { get; set; }
         public long phoneNumber { get; set; }
         public string email { get; set; }
+        public string Name { get; set; }
+        public string typeOf { get; set; }
 
         string outputMessage;
         string connectionString = @"Data Source=s;Initial Catalog=AddressBookADO;Integrated Security=True;Pooling=False";
@@ -43,6 +45,8 @@ namespace AddressBookDatabase
                     command.Parameters.AddWithValue("@zip", contact.zipcode);
                     command.Parameters.AddWithValue("@phoneNumber", contact.phoneNumber);
                     command.Parameters.AddWithValue("@email", contact.email);
+                    command.Parameters.AddWithValue("@Name", contact.Name);
+                    command.Parameters.AddWithValue("@typeOf", contact.typeOf);
                     connection.Open();
                     result = command.ExecuteNonQuery();
                     outputMessage = result == 1 ? "Contact Added SuccessFully" : "Contact Add failed";
@@ -133,6 +137,8 @@ namespace AddressBookDatabase
                     command.Parameters.AddWithValue("@zip", contact.zipcode);
                     command.Parameters.AddWithValue("@phoneNumber", contact.phoneNumber);
                     command.Parameters.AddWithValue("@email", contact.email);
+                    command.Parameters.AddWithValue("@Names", contact.Name);
+                    command.Parameters.AddWithValue("@typeOf", contact.typeOf);
                     connection.Open();
                     result = command.ExecuteNonQuery();
                     outputMessage = result == 1 ? "Contact Edited SuccessFully" : "Contact Edit failed";
@@ -252,7 +258,7 @@ namespace AddressBookDatabase
                     {
                         Console.WriteLine($"Number of cities: {dr.GetInt32(0)} \n Number of states: {dr.GetInt32(1)}");
                     }
-                    return dr != null ? true : false; 
+                    return dr != null ? true : false;
                 }
             }
             catch (Exception ex)
@@ -296,11 +302,47 @@ namespace AddressBookDatabase
                         zipcode = dr.GetInt32(5);
                         phoneNumber = dr.GetInt64(6);
                         email = dr.GetString(7);
-                        Console.WriteLine($"{firstName} {lastName} {address} {city} {state} {zipcode} {phoneNumber} {email}");
+                        Name = dr.GetString(8);
+                        typeOf = dr.GetString(9);
+                        Console.WriteLine($"{firstName} {lastName} {address} {city} {state} {zipcode} {phoneNumber} {email} {Name} {typeOf}");
                     }
                     outputMessage = flag >= 1 ? $"{flag} Contact(s) found" : "Contact not found";
                     Console.WriteLine(outputMessage);
                     return flag >= 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// get size of database by TypeOf
+        /// </summary>
+        /// <returns> true or false</returns>
+        public bool GetSizeByType()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    string spName = "dbo.SpGetSizeByType";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    SqlDataReader dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Console.WriteLine($"Number of Contacts {dr.GetInt32(0)}");
+                    }
+                    return dr != null ? true : false;
                 }
             }
             catch (Exception ex)

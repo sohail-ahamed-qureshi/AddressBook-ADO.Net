@@ -7,8 +7,10 @@
 	@state varchar(255),
 	@zip int,
 	@phoneNumber bigint,
-	@email varchar(255)
+	@email varchar(255),
+	@Names varchar(255),
+	@typeOf varchar(255)
 AS
-	UPDATE ContactBook set firstName = @firstName, lastName =@lastName , address = @address, city =@city , state = @state, zip =@zip , phoneNumber = @phoneNumber, email = @email  
+	UPDATE ContactBook set firstName = @firstName, lastName =@lastName , address = @address, city =@city , state = @state, zip =@zip , phoneNumber = @phoneNumber, email = @email, Name = @Names, TypeOf = @typeOf 
 	Where firstName = @name;
 RETURN 0
