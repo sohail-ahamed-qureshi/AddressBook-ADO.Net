@@ -16,6 +16,7 @@ namespace AddressBookDatabase
         public long phoneNumber { get; set; }
         public string email { get; set; }
 
+        string outputMessage;
         string connectionString = @"Data Source=s;Initial Catalog=AddressBookADO;Integrated Security=True;Pooling=False";
         /// <summary>
         /// add new contact to addressbook database that contains contactBook table,
@@ -44,6 +45,8 @@ namespace AddressBookDatabase
                     command.Parameters.AddWithValue("@email", contact.email);
                     connection.Open();
                     result = command.ExecuteNonQuery();
+                    outputMessage = result == 1 ? "Contact Added SuccessFully" : "Contact Add failed";
+                    Console.WriteLine(outputMessage);
                 }
                 return result == 1;
             }
@@ -89,6 +92,8 @@ namespace AddressBookDatabase
                         email = dr.GetString(7);
                         Console.WriteLine($"{firstName} {lastName} {address} {city} {state} {zipcode} {phoneNumber} {email}");
                     }
+                    outputMessage = flag >= 1 ? $"{flag} Contact(s) found" : "Contact not found";
+                    Console.WriteLine(outputMessage);
                     return flag >= 1;
                 }
             }
@@ -130,6 +135,42 @@ namespace AddressBookDatabase
                     command.Parameters.AddWithValue("@email", contact.email);
                     connection.Open();
                     result = command.ExecuteNonQuery();
+                    outputMessage = result == 1 ? "Contact Edited SuccessFully" : "Contact Edit failed";
+                    Console.WriteLine(outputMessage);
+                }
+                return result == 1;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return false;
+        }
+        /// <summary>
+        /// deletes particular contact of person
+        /// </summary>
+        /// <param name="name">name of the person to be deleted</param>
+        /// <returns></returns>
+        public bool DeleteContact(string name)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                int result;
+                using (connection)
+                {
+                    string spName = "dbo.SpDeleteContact";
+                    SqlCommand command = new SqlCommand(spName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@name", name);
+                    connection.Open();
+                    result = command.ExecuteNonQuery();
+                    outputMessage = result >= 1 ? "Contact Deleted SuccessFully" : "Contact Delete Unsuccessfull";
+                    Console.WriteLine(outputMessage);
                 }
                 return result == 1;
             }

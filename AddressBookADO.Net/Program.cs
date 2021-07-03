@@ -19,16 +19,15 @@ namespace AddressBookDatabase
                 phoneNumber = 999999999999,
                 email = "emailme@email.com"
             };
-            string res;
-            res = contact.AddContact(contact) ? "Contact add successfull" : "Contact Add failed";
-            Console.WriteLine(res);
-
+            //add contact to database
+            contact.AddContact(contact);
             //edit contact of terisa
-            res = contact.EditContact("terisa", contact) ? "contact edit SuccessFull!!" : "Contact edit failed";
-            Console.WriteLine(res);
+            contact.EditContact("terisa", contact);
             ////get Contact of terisa
-            res = contact.GetContact("terisa") ? "contact found!!" : "Contact not found";
-            Console.WriteLine(res);
+            contact.GetContact("terisa");
+            //delete Contact of john
+            contact.DeleteContact("john");
+
         }
     }
 }
