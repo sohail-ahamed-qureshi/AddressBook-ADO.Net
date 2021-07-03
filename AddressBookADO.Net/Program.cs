@@ -31,6 +31,9 @@ namespace AddressBookDatabase
             contact.RetrieveContact("bangalore");
             //get size by city and state
             contact.GetSize();
+            //sort table alphabetically by person's name for given city
+            contact.SortTable("Mysore");
+
         }
     }
 }
