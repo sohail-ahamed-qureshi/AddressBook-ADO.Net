@@ -16,3 +16,7 @@ email varchar(255)
 
 --display table
 select * from ContactBook
+
+--UC9 -ability to identify each address book with name and type
+ALTER TABLE ContactBook ADD Name varchar(255) not null DEFAULT 'FriendsContacts', 
+TypeOf varchar(255) not null DEFAULT 'Friends'; 
