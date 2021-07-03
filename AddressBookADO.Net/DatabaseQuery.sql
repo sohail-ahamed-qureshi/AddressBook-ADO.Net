@@ -13,3 +13,6 @@ zip int,
 phoneNumber bigint,
 email varchar(255)
 );
+
+--display table
+select * from ContactBook
